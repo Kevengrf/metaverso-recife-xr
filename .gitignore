@@ -5,3 +5,14 @@ __pycache__/
 *.rar
 *.dmg
 .env
+RecifeVR_Unity/Library/
+RecifeVR_Unity/Temp/
+RecifeVR_Unity/Obj/
+RecifeVR_Unity/Logs/
+RecifeVR_Unity/UserSettings/
+RecifeVR_Unity/Assets/Recife3D/*.obj
+RecifeVR_Unity/Assets/Recife3D/*.jpg
+RecifeVR_Unity/Assets/Recife3D/*.mtl
+*.meta
+
+

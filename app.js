@@ -16,7 +16,7 @@ const STATIONS = [
     description:
       'Ponto zero do Recife Antigo e coração do Rec\'n\'Play. Em escala humana 1:1 (1.70m), observe a proporção real do prédio da Caixa Cultural, Associação Comercial e o estuário do Rio Capibaribe.',
     pos: { x: 0.0, z: 0.0 },
-    yawDeg: 15,
+    yawDeg: 90,
     color: '#facc15',
     accent: '#00f0ff',
     metrics: ['Escala 1:1 Real', 'Raio da Sala: 3.5m', 'Prédios: 18m–42m'],
@@ -61,7 +61,7 @@ const STATIONS = [
     shortDesc: '12/11 (07h30) a 13/11 (07h30) • Mentoria & Inovação',
     description:
       'Sala dedicada à maratona de 24h da BB Tecnologia e Serviços (BBTS) no Rec\'n\'Play. Demonstração prática para gestores e equipes de como ambientes XR imersivos resolvem problemas reais.',
-    pos: { x: -10.5, z: 62.0 },
+    pos: { x: 45.0, z: 32.0 },
     yawDeg: 180,
     color: '#facc15',
     accent: '#1d4ed8',
@@ -107,7 +107,7 @@ const STATIONS = [
     shortDesc: 'Galera Tech de Recife • Networking & Futuro',
     description:
       'Ponto de encontro da Comunidade IV no Boulevard Rio Branco. Um espaço pensado para inspirar a comunidade local de desenvolvedores, estudantes e entusiastas de tecnologia do Recife.',
-    pos: { x: 24.0, z: 14.5 },
+    pos: { x: 88.0, z: -12.0 },
     yawDeg: -90,
     color: '#00f0ff',
     accent: '#8b5cf6',
@@ -152,7 +152,7 @@ const STATIONS = [
     shortDesc: 'Paço do Frevo, Torre Malakoff & Casarões',
     description:
       'Caminhe em escala 1:1 entre os casarões históricos da Rua do Bom Jesus e a Praça do Arsenal da Marinha, onde tecnologia, cultura pernambucana e economia criativa se encontram.',
-    pos: { x: -35.0, z: -116.0 },
+    pos: { x: 65.0, z: -145.0 },
     yawDeg: 0,
     color: '#f43f5e',
     accent: '#facc15',
@@ -195,7 +195,7 @@ const STATIONS = [
     shortDesc: 'Grandes Arenas, Palestras & Economia Criativa',
     description:
       'Esplanada do Cais do Sertão e Armazéns do Porto. Sinta a escala monumental do vão livre e dos galpões portuários revitalizados que abrigam os grandes palcos do Rec\'n\'Play.',
-    pos: { x: -95.0, z: -225.0 },
+    pos: { x: 35.0, z: -260.0 },
     yawDeg: 140,
     color: '#38bdf8',
     accent: '#facc15',
@@ -237,7 +237,7 @@ const STATIONS = [
     shortDesc: 'Arrecifes do Porto • Skyline Completo do Recife',
     description:
       'Sobre o molhe de arrecifes a leste do Marco Zero. Daqui você tem a vista panorâmica 360° mais famosa de toda a ilha do Recife Antigo refletida nas águas do estuário.',
-    pos: { x: -310.0, z: 10.0 },
+    pos: { x: -135.0, z: -15.0 },
     yawDeg: -90,
     color: '#a855f7',
     accent: '#00f0ff',
@@ -399,7 +399,7 @@ const waterMat = new THREE.MeshStandardMaterial({
   opacity: 0.88
 });
 const waterMesh = new THREE.Mesh(waterGeo, waterMat);
-waterMesh.position.y = -6.2; // Nível médio da lâmina d'água no estuário
+waterMesh.position.y = -15.5; // Abaixo de todas as ruas para não cortar a malha terrestre
 scene.add(waterMesh);
 
 // ============================================================================
@@ -543,103 +543,23 @@ const roomWallsMeshes = [];
 const silhouetteGroups = [];
 
 function buildStations3D() {
-  const radius = 3.6; // Sala de 7.2m de diâmetro (espaço limitado super confortável em escala 1:1)
+  const radius = 2.5; // Demarcação discreta no chão (sem paredes/painéis gigantes tapando os prédios 3D!)
 
-  STATIONS.forEach((st, idx) => {
+  STATIONS.forEach((st) => {
     const group = new THREE.Group();
-    group.position.set(st.pos.x, -4.0, st.pos.z);
+    group.position.set(st.pos.x, 0.0, st.pos.z);
 
-    // 1. Piso Delimitado da Sala (Anel Guardian + Plataforma Circular sutil no chão)
-    const ringGeo = new THREE.RingGeometry(radius - 0.14, radius, 64);
+    // Demarcação discreta no piso da rua (estilo ponto de teletransporte VR no chão)
+    const ringGeo = new THREE.RingGeometry(radius - 0.12, radius, 48);
     ringGeo.rotateX(-Math.PI / 2);
     const ringMat = new THREE.MeshBasicMaterial({
       color: st.color,
       side: THREE.DoubleSide
     });
     const ringMesh = new THREE.Mesh(ringGeo, ringMat);
-    ringMesh.position.y = 0.04;
+    ringMesh.position.y = 0.08;
     group.add(ringMesh);
-
-    const floorDiscGeo = new THREE.CircleGeometry(radius - 0.14, 64);
-    floorDiscGeo.rotateX(-Math.PI / 2);
-    const floorDiscMat = new THREE.MeshBasicMaterial({
-      color: st.color,
-      transparent: true,
-      opacity: 0.12,
-      side: THREE.DoubleSide
-    });
-    const floorDisc = new THREE.Mesh(floorDiscGeo, floorDiscMat);
-    floorDisc.position.y = 0.03;
-    group.add(floorDisc);
-
-    // 2. Paredes Cilíndricas Translúcidas da "Sala Limitada 360°" (3.0m de altura)
-    const wallGeo = new THREE.CylinderGeometry(radius, radius, 3.0, 48, 1, true);
-    const wallMat = new THREE.MeshBasicMaterial({
-      color: st.color,
-      transparent: true,
-      opacity: 0.07,
-      side: THREE.DoubleSide,
-      wireframe: false,
-      depthWrite: false
-    });
-    const wallMesh = new THREE.Mesh(wallGeo, wallMat);
-    wallMesh.position.y = 1.5;
-    group.add(wallMesh);
-    roomWallsMeshes.push(wallMesh);
-
-    // Grade superior da Sala (a 3.0m de altura — pé-direito real de uma sala)
-    const topRingGeo = new THREE.RingGeometry(radius - 0.08, radius, 48);
-    topRingGeo.rotateX(-Math.PI / 2);
-    const topRing = new THREE.Mesh(topRingGeo, ringMat);
-    topRing.position.y = 3.0;
-    wallMesh.add(topRing);
-
-    // 3. Três Painéis Holográficos Curvos/Flutuantes na Altura Humana (centro a 1.65m do chão!)
-    const angles = [-Math.PI * 0.28, 0, Math.PI * 0.28];
-    st.panels.forEach((pData, pIdx) => {
-      const tex = createHoloPanelTexture(pData, st.color, st.accent, st.badge);
-      const panelGeo = new THREE.PlaneGeometry(2.15, 1.35);
-      const panelMat = new THREE.MeshBasicMaterial({
-        map: tex,
-        side: THREE.DoubleSide,
-        transparent: true
-      });
-      const panelMesh = new THREE.Mesh(panelGeo, panelMat);
-
-      const ang = THREE.MathUtils.degToRad(st.yawDeg) + angles[pIdx];
-      const dist = radius - 0.35;
-      panelMesh.position.set(
-        -Math.sin(ang) * dist,
-        1.65, // Altura exata dos olhos de um humano em pé (1.65m)
-        -Math.cos(ang) * dist
-      );
-      panelMesh.lookAt(group.position.x, group.position.y + 1.65, group.position.z);
-      // Orienta a face do painel para quem está no centro da sala (0, 1.65, 0 local)
-      panelMesh.lookAt(0, 1.65, 0);
-      group.add(panelMesh);
-    });
-
-    // 4. Beacon Luminoso Vertical (visível de longe para orientar quem caminha pela cidade)
-    const beaconGeo = new THREE.CylinderGeometry(0.08, 0.08, 45, 12);
-    const beaconMat = new THREE.MeshBasicMaterial({
-      color: st.color,
-      transparent: true,
-      opacity: 0.38
-    });
-    const beacon = new THREE.Mesh(beaconGeo, beaconMat);
-    beacon.position.y = 22.5;
-    group.add(beacon);
-
-    // 5. Avatar de Referência Humana 1:1 (1.75m) dentro da Sala
-    const humanRef = createHumanScaleReference(
-      st.color,
-      idx === 1 ? 'Mentor BBTS (1.75m)' : 'Membro IV (1.75m)'
-    );
-    const refAngle = THREE.MathUtils.degToRad(st.yawDeg) + Math.PI * 0.55;
-    humanRef.position.set(-Math.sin(refAngle) * 2.2, 0.02, -Math.cos(refAngle) * 2.2);
-    humanRef.lookAt(0, 0.02, 0);
-    group.add(humanRef);
-    silhouetteGroups.push(humanRef);
+    roomWallsMeshes.push(ringMesh);
 
     scene.add(group);
     stationGroups.push({ station: st, group });
@@ -673,15 +593,16 @@ async function loadRecife3DTiles() {
         (gltf) => {
           gltf.scene.traverse((child) => {
             if (child.isMesh) {
-              // Material Unlit/PBR equilibrado para fotogrametria nítida em qualquer luz
+              // Fotogrametria já possui iluminação/sombras reais gravadas na textura aérea (Unlit + DoubleSide evita buracos de backface!)
               const oldMat = child.material;
               const map = oldMat.map;
               if (map) {
                 map.colorSpace = THREE.SRGBColorSpace;
                 map.anisotropy = Math.min(renderer.capabilities.getMaxAnisotropy(), 8);
               }
-              child.material = new THREE.MeshLambertMaterial({
-                map: map
+              child.material = new THREE.MeshBasicMaterial({
+                map: map,
+                side: THREE.DoubleSide
               });
               groundMeshes.push(child);
             }
@@ -1002,8 +923,8 @@ renderer.setAnimationLoop(() => {
   const dt = Math.min(clock.getDelta(), 0.1);
   const elapsed = clock.getElapsedTime();
 
-  // Animação suave dos anéis das salas e da água
-  waterMesh.position.y = -6.2 + Math.sin(elapsed * 1.4) * 0.08;
+  // Animação suave da água (abaixo do nível das ruas)
+  waterMesh.position.y = -15.5 + Math.sin(elapsed * 1.4) * 0.08;
 
   // Locomoção no Desktop (WASD / Setas)
   const fwdInput = (keys.KeyW || keys.ArrowUp ? 1 : 0) - (keys.KeyS || keys.ArrowDown ? 1 : 0);
@@ -1069,3 +990,4 @@ window.addEventListener('resize', () => {
 });
 
 loadRecife3DTiles();
+

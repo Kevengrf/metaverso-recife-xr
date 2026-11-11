@@ -20,3 +20,4 @@ Experiência imersiva de **Gêmeo Digital 3D em Escala Humana Real (1:1)** combi
 python3 -m http.server 8080
 ```
 Acesse `http://localhost:8080` no navegador (ou via Meta Quest Browser no **Meta Quest 3S**).
+

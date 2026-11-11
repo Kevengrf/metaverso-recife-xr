@@ -29,10 +29,10 @@ TILES_CONFIG = [
     ("03726171425142516", "ponte_limoeiro_noroeste", "Rio Capibaribe Norte & Santo Amaro"),
 ]
 
-# Coordenada exata da Rosa dos Ventos na malha do tile central (03726171425142515) já com scale 1.0045
-ORIGIN_X = -37.9 * 1.0045000314712524
-ORIGIN_Y = 113.50  # Nível exato do piso da Praça do Marco Zero
-ORIGIN_Z = 39.2 * 1.0045000314712524
+# Coordenada exata da área aberta da Praça do Marco Zero (em frente à Caixa Cultural e Associação Comercial)
+ORIGIN_X = -238.0 * 1.0045000314712524
+ORIGIN_Y = 109.20  # Nível exato da calçada da Praça do Marco Zero
+ORIGIN_Z = 90.0 * 1.0045000314712524
 
 
 def octree_to_grid(path: str):
@@ -122,7 +122,7 @@ def build_standard_glb(vertices_pos, vertices_norm, vertices_uv, indices, jpeg_b
                     "metallicFactor": 0.0,
                     "roughnessFactor": 0.9,
                 },
-                "doubleSided": False,
+                "doubleSided": True,
             }
         ],
         "textures": [{"source": 0, "sampler": 0}],
@@ -279,7 +279,7 @@ def main():
 
                             all_pos.extend((wx, wy, wz))
                             all_norm.extend((nx, ny, nz))
-                            all_uv.extend((float(u_f16), 1.0 - float(v_f16)))
+                            all_uv.extend((float(u_f16), float(v_f16)))
 
                         i_bv = buffer_views[idx_acc["bufferView"]]
                         i_byte_off = i_bv.get("byteOffset", 0) + idx_acc.get("byteOffset", 0)
@@ -288,8 +288,11 @@ def main():
                             f"<{i_count}H",
                             data[bin_start + i_byte_off : bin_start + i_byte_off + i_count * 2],
                         )
-                        for r_idx in raw_indices:
-                            all_idx.append(v_offset + r_idx)
+                        # Inverte a ordem (i0, i2, i1) de DirectX (CW) para OpenGL/glTF/Unity (CCW)
+                        for ti in range(0, i_count, 3):
+                            all_idx.append(v_offset + raw_indices[ti])
+                            all_idx.append(v_offset + raw_indices[ti + 2])
+                            all_idx.append(v_offset + raw_indices[ti + 1])
 
                         v_offset += v_count
 
@@ -326,3 +329,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+
