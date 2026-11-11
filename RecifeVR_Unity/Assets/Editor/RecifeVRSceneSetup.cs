@@ -1,43 +1,68 @@
 #if UNITY_EDITOR
+using System.IO;
 using UnityEditor;
+using UnityEditor.SceneManagement;
 using UnityEngine;
 using UnityEngine.Rendering;
 
+[InitializeOnLoad]
 public static class RecifeVRSceneSetup
 {
-    private static readonly string[] TileSlugs = new string[]
+    private static readonly string[] SmoothMapSlugs = new string[]
     {
-        "marco_zero_centro",
-        "bom_jesus_arsenal_norte",
-        "recife_antigo_sul",
-        "cais_santa_rita_oeste",
-        "parque_esculturas_leste",
-        "porto_digital_nordeste",
-        "bacia_porto_sudeste",
-        "ponte_limoeiro_noroeste",
-        "santo_antonio_sudoeste"
+        "recife_chao_paralelepipedo_liso",
+        "recife_praca_marco_zero_rosa",
+        "recife_predios_monumentais_marco_zero",
+        "recife_casaroes_historicos_bairro"
     };
 
-    [MenuItem("Metaverso BBTS & IV/Montar Recife Antigo 3D (Escala 1:1 + Fachadas IA 4K) na Cena")]
+    static RecifeVRSceneSetup()
+    {
+        EditorApplication.delayCall += AutoBuildIfSceneEmpty;
+    }
+
+    private static void AutoBuildIfSceneEmpty()
+    {
+        if (EditorApplication.isPlayingOrWillChangePlaymode) return;
+        if (GameObject.Find("RecifeAntigo_MapaLiso_1to1") == null)
+        {
+            GameObject check = AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Recife3D/recife_chao_paralelepipedo_liso.obj");
+            if (check != null)
+            {
+                BuildRecifeScene();
+            }
+        }
+    }
+
+    [MenuItem("Metaverso BBTS & IV/Montar Mapa Liso & Renderizado 360 (Escala 1:1)")]
     public static void BuildRecifeScene()
     {
-        GameObject existingCity = GameObject.Find("RecifeAntigo_3D_1to1");
+        GameObject oldCity = GameObject.Find("RecifeAntigo_3D_1to1");
+        if (oldCity != null) GameObject.DestroyImmediate(oldCity);
+        GameObject existingCity = GameObject.Find("RecifeAntigo_MapaLiso_1to1");
         if (existingCity != null) GameObject.DestroyImmediate(existingCity);
 
-        GameObject cityRoot = new GameObject("RecifeAntigo_3D_1to1");
+        GameObject cityRoot = new GameObject("RecifeAntigo_MapaLiso_1to1");
         cityRoot.transform.position = Vector3.zero;
 
-        Shader unlitShader = Shader.Find("Unlit/Texture") ?? Shader.Find("Standard");
+        Shader litShader = Shader.Find("Standard");
 
-        // 1. Instancia os 9 blocos de fotogrametria 1:1 com MeshCollider
-        foreach (string slug in TileSlugs)
+        foreach (string slug in SmoothMapSlugs)
         {
             string objPath = $"Assets/Recife3D/{slug}.obj";
             string texPath = $"Assets/Recife3D/{slug}.jpg";
 
+            TextureImporter ti = AssetImporter.GetAtPath(texPath) as TextureImporter;
+            if (ti != null)
+            {
+                ti.wrapMode = slug.Contains("rosa") ? TextureWrapMode.Clamp : TextureWrapMode.Repeat;
+                ti.anisoLevel = 8;
+                ti.maxTextureSize = 4096;
+                ti.SaveAndReimport();
+            }
+
             GameObject modelPrefab = AssetDatabase.LoadAssetAtPath<GameObject>(objPath);
             Texture2D tex = AssetDatabase.LoadAssetAtPath<Texture2D>(texPath);
-
             if (modelPrefab == null) continue;
 
             GameObject instance = (GameObject)PrefabUtility.InstantiatePrefab(modelPrefab, cityRoot.transform);
@@ -46,8 +71,9 @@ public static class RecifeVRSceneSetup
             instance.transform.localRotation = Quaternion.identity;
             instance.transform.localScale = Vector3.one;
 
-            Material mat = new Material(unlitShader);
+            Material mat = new Material(litShader);
             if (tex != null) mat.mainTexture = tex;
+            mat.SetFloat("_Glossiness", 0.15f);
             mat.SetInt("_Cull", (int)CullMode.Off);
 
             foreach (MeshRenderer mr in instance.GetComponentsInChildren<MeshRenderer>())
@@ -63,22 +89,7 @@ public static class RecifeVRSceneSetup
             }
         }
 
-        // 2. Aplica a Rosa dos Ventos 4K IA no chão da Praça do Marco Zero (22m x 22m em escala 1:1)
-        Texture2D rosaTex = AssetDatabase.LoadAssetAtPath<Texture2D>("Assets/Recife3D/AITextures/rosa_dos_ventos_hd.jpg");
-        if (rosaTex != null)
-        {
-            GameObject rosaFloor = GameObject.CreatePrimitive(PrimitiveType.Quad);
-            rosaFloor.name = "RosaDosVentos_IA_4K";
-            rosaFloor.transform.SetParent(cityRoot.transform);
-            rosaFloor.transform.position = new Vector3(0f, -3.92f, 0f);
-            rosaFloor.transform.eulerAngles = new Vector3(90f, 0f, 0f);
-            rosaFloor.transform.localScale = new Vector3(22f, 22f, 1f);
-            Material rosaMat = new Material(unlitShader);
-            rosaMat.mainTexture = rosaTex;
-            rosaFloor.GetComponent<MeshRenderer>().sharedMaterial = rosaMat;
-        }
-
-        // 3. Aplica o Skybox 360° renderizado por IA na cena
+        // Skybox 360° Fotorrealista no horizonte
         Texture2D skyTex = AssetDatabase.LoadAssetAtPath<Texture2D>("Assets/Recife3D/AITextures/skybox_marco_zero_360.jpg");
         if (skyTex != null)
         {
@@ -91,12 +102,12 @@ public static class RecifeVRSceneSetup
             }
         }
 
-        // 4. Cria o Jogador VR em Escala Humana 1:1 (1,70m) na Praça do Marco Zero
+        // Jogador VR em Escala Humana 1:1 (1,70m de altura) no centro da Praça do Marco Zero (0, 0, 0)
         GameObject existingPlayer = GameObject.Find("Player_VR_Quest3S");
         if (existingPlayer != null) GameObject.DestroyImmediate(existingPlayer);
 
         GameObject player = new GameObject("Player_VR_Quest3S");
-        player.transform.position = new Vector3(0f, -3.5f, 0f);
+        player.transform.position = new Vector3(0f, 0.1f, 0f);
         player.AddComponent<CharacterController>();
         player.AddComponent<RecifeVRPlayerController>();
 
@@ -109,10 +120,17 @@ public static class RecifeVRSceneSetup
         }
         mainCam.transform.SetParent(player.transform);
         mainCam.transform.localPosition = new Vector3(0f, 1.70f, 0f);
-        mainCam.transform.localRotation = Quaternion.identity;
+        mainCam.transform.localRotation = Quaternion.Euler(0f, -90f, 0f);
+
+        Directory.CreateDirectory("Assets/Scenes");
+        EditorSceneManager.SaveScene(EditorSceneManager.GetActiveScene(), "Assets/Scenes/RecifeMarcoZeroVR.unity");
 
         Selection.activeGameObject = player;
-        Debug.Log("[Metaverso BBTS & IV] Recife Antigo 3D (1:1) + Texturas IA 4K montados com sucesso!");
+        if (SceneView.lastActiveSceneView != null)
+        {
+            SceneView.lastActiveSceneView.LookAt(new Vector3(0f, 1.7f, 0f), Quaternion.Euler(8f, -90f, 0f), 12f);
+        }
+        Debug.Log("[Recife VR 1:1] Mapa 3D Liso & Renderizado (399 edificações + Piso 4K + Skybox 360) pronto!");
     }
 }
 #endif

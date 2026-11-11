@@ -1,227 +1,34 @@
 [
   {
-    "code": "03726171425142515",
-    "slug": "marco_zero_centro",
-    "file": "assets/tiles/marco_zero_centro.glb",
-    "description": "Praça do Marco Zero & Caixa Cultural",
-    "grid": [
-      0,
-      0
-    ],
-    "size_kb": 4876.8,
-    "vertices": 82982,
-    "triangles": 53181,
-    "bounds": {
-      "min": [
-        -67.56,
-        -15.57,
-        -90.41
-      ],
-      "max": [
-        239.07,
-        67.93,
-        218.76
-      ]
-    }
+    "slug": "recife_chao_paralelepipedo_liso",
+    "file": "assets/tiles/recife_chao_paralelepipedo_liso.glb",
+    "description": "recife_chao_paralelepipedo_liso",
+    "vertices": 9716,
+    "triangles": 4858,
+    "size_kb": 1631.7
   },
   {
-    "code": "03726171425142514",
-    "slug": "cais_santa_rita_oeste",
-    "file": "assets/tiles/cais_santa_rita_oeste.glb",
-    "description": "Cais de Santa Rita & Rio Capibaribe",
-    "grid": [
-      -1,
-      0
-    ],
-    "size_kb": 2562.8,
-    "vertices": 44053,
-    "triangles": 26736,
-    "bounds": {
-      "min": [
-        238.77,
-        -18.44,
-        -90.41
-      ],
-      "max": [
-        544.82,
-        78.11,
-        218.74
-      ]
-    }
+    "slug": "recife_praca_marco_zero_rosa",
+    "file": "assets/tiles/recife_praca_marco_zero_rosa.glb",
+    "description": "recife_praca_marco_zero_rosa",
+    "vertices": 4,
+    "triangles": 2,
+    "size_kb": 1109.3
   },
   {
-    "code": "03726171425143404",
-    "slug": "parque_esculturas_leste",
-    "file": "assets/tiles/parque_esculturas_leste.glb",
-    "description": "Parque das Esculturas de Brennand & Arrecifes",
-    "grid": [
-      1,
-      0
-    ],
-    "size_kb": 895.3,
-    "vertices": 13543,
-    "triangles": 9325,
-    "bounds": {
-      "min": [
-        -372.37,
-        -20.52,
-        -90.41
-      ],
-      "max": [
-        -66.68,
-        29.0,
-        216.91
-      ]
-    }
+    "slug": "recife_predios_monumentais_marco_zero",
+    "file": "assets/tiles/recife_predios_monumentais_marco_zero.glb",
+    "description": "recife_predios_monumentais_marco_zero",
+    "vertices": 650,
+    "triangles": 480,
+    "size_kb": 959.8
   },
   {
-    "code": "03726171425142517",
-    "slug": "bom_jesus_arsenal_norte",
-    "file": "assets/tiles/bom_jesus_arsenal_norte.glb",
-    "description": "Rua do Bom Jesus, Paço do Frevo, Torre Malakoff & Cais do Sertão",
-    "grid": [
-      0,
-      1
-    ],
-    "size_kb": 4475.5,
-    "vertices": 78768,
-    "triangles": 48692,
-    "bounds": {
-      "min": [
-        -67.57,
-        -1.03,
-        -398.65
-      ],
-      "max": [
-        239.07,
-        77.14,
-        -89.48
-      ]
-    }
-  },
-  {
-    "code": "03726171425140737",
-    "slug": "recife_antigo_sul",
-    "file": "assets/tiles/recife_antigo_sul.glb",
-    "description": "Av. Marquês de Olinda, Madre de Deus & Pontes",
-    "grid": [
-      0,
-      -1
-    ],
-    "size_kb": 2575.0,
-    "vertices": 45049,
-    "triangles": 28765,
-    "bounds": {
-      "min": [
-        -66.64,
-        -18.59,
-        217.83
-      ],
-      "max": [
-        239.07,
-        28.53,
-        526.66
-      ]
-    }
-  },
-  {
-    "code": "03726171425143406",
-    "slug": "porto_digital_nordeste",
-    "file": "assets/tiles/porto_digital_nordeste.glb",
-    "description": "Cais do Sertão & Porto do Recife",
-    "grid": [
-      1,
-      1
-    ],
-    "size_kb": 1874.6,
-    "vertices": 31121,
-    "triangles": 20511,
-    "bounds": {
-      "min": [
-        -372.37,
-        -21.52,
-        -398.65
-      ],
-      "max": [
-        -66.68,
-        45.03,
-        -90.09
-      ]
-    }
-  },
-  {
-    "code": "03726171425141626",
-    "slug": "bacia_porto_sudeste",
-    "file": "assets/tiles/bacia_porto_sudeste.glb",
-    "description": "Bacia do Porto & Molhe Sul",
-    "grid": [
-      1,
-      -1
-    ],
-    "size_kb": 664.9,
-    "vertices": 8841,
-    "triangles": 6613,
-    "bounds": {
-      "min": [
-        -371.46,
-        -11.06,
-        217.83
-      ],
-      "max": [
-        -66.68,
-        12.32,
-        525.15
-      ]
-    }
-  },
-  {
-    "code": "03726171425142516",
-    "slug": "ponte_limoeiro_noroeste",
-    "file": "assets/tiles/ponte_limoeiro_noroeste.glb",
-    "description": "Rio Capibaribe Norte & Santo Amaro",
-    "grid": [
-      -1,
-      1
-    ],
-    "size_kb": 980.6,
-    "vertices": 17526,
-    "triangles": 11710,
-    "bounds": {
-      "min": [
-        239.11,
-        -18.44,
-        -398.65
-      ],
-      "max": [
-        544.82,
-        15.37,
-        -90.11
-      ]
-    }
-  },
-  {
-    "code": "03726171425140736",
-    "slug": "santo_antonio_sudoeste",
-    "file": "assets/tiles/santo_antonio_sudoeste.glb",
-    "description": "Ponte Maurício de Nassau & Santo Antônio",
-    "grid": [
-      -1,
-      -1
-    ],
-    "size_kb": 1719.5,
-    "vertices": 28690,
-    "triangles": 19152,
-    "bounds": {
-      "min": [
-        238.19,
-        -13.12,
-        217.83
-      ],
-      "max": [
-        544.82,
-        61.15,
-        527.01
-      ]
-    }
+    "slug": "recife_casaroes_historicos_bairro",
+    "file": "assets/tiles/recife_casaroes_historicos_bairro.glb",
+    "description": "recife_casaroes_historicos_bairro",
+    "vertices": 11835,
+    "triangles": 7908,
+    "size_kb": 1376.5
   }
 ]

@@ -3,11 +3,13 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
-  <title>Recife 1:1 XR — Marco Zero, BBTS Hackathon 24h & Comunidade IV no Rec'n'Play</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css" />
+  <title>Mapa 3D Liso & Imersão 360° — Marco Zero do Recife (Escala 1:1)</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html, body { width: 100%; height: 100%; overflow: hidden; background: #000; }
+    #xr-canvas { width: 100vw; height: 100vh; display: block; cursor: grab; }
+    #xr-canvas:active { cursor: grabbing; }
+  </style>
   <script type="importmap">
     {
       "imports": {
@@ -18,145 +20,7 @@
   </script>
 </head>
 <body>
-  <!-- Tela de Carregamento Inicial -->
-  <div id="loading-overlay">
-    <div class="loader-card">
-      <div class="badge-row">
-        <span class="pill pill-bbts">BBTS • Hackathon 24h</span>
-        <span class="pill pill-iv">Comunidade IV • Recife</span>
-        <span class="pill pill-rnp">Rec'n'Play • Marco Zero</span>
-      </div>
-      <h1>Gêmeo Digital 3D — Recife Antigo (Escala 1:1)</h1>
-      <p class="subtitle">
-        Carregando malha fotogramétrica real do Bairro do Recife (9 blocos LOD00 • 350.573 vértices) e Salas Imersivas 360° para <strong>Meta Quest 3S</strong>.
-      </p>
-      <div class="progress-bar-wrap">
-        <div id="loading-bar" class="progress-bar-fill" style="width: 8%"></div>
-      </div>
-      <div id="loading-status" class="mono-status">Inicializando pipeline 3D glTF 2.0...</div>
-    </div>
-  </div>
-
-  <!-- HUD Topo: Identidade BBTS + Comunidade IV + Telemetria Escala Humana 1:1 -->
-  <header id="hud-top">
-    <div class="brand-block">
-      <div class="brand-logos">
-        <span class="logo-tag bbts">BBTS</span>
-        <span class="logo-tag iv">COMUNIDADE IV</span>
-        <span class="logo-tag rnp">REC'N'PLAY</span>
-      </div>
-      <div class="brand-title">
-        <strong>Marco Zero & Recife Antigo 3D</strong>
-        <span id="current-zone-label">Praça Rio Branco (Rosa dos Ventos)</span>
-      </div>
-    </div>
-
-    <div class="telemetry-bar">
-      <div class="telemetry-item">
-        <span class="t-label">ESCALA HUMANA</span>
-        <span id="hud-eye-height" class="t-value">1.70m (1:1 Real)</span>
-      </div>
-      <div class="telemetry-item">
-        <span class="t-label">MODO LOCOMOÇÃO</span>
-        <span id="hud-locomotion-mode" class="t-value">Caminhada no Chão</span>
-      </div>
-      <div class="telemetry-item">
-        <span class="t-label">COORDENADAS (MARCO ZERO)</span>
-        <span id="hud-coords" class="t-value">X: 0m | Z: 0m | Alt: 0.0m</span>
-      </div>
-      <div class="telemetry-item">
-        <span class="t-label">HACKATHON BBTS</span>
-        <span class="t-value highlight-yellow">12–13/11 • 07h30–07h30 (24h)</span>
-      </div>
-    </div>
-  </header>
-
-  <!-- Painel Lateral Esquerdo: Salas Limitadas / Estações de Teletransporte -->
-  <aside id="stations-panel">
-    <div class="panel-header">
-      <h2>Salas 360° & Pontos 1:1</h2>
-      <span class="panel-hint">Clique ou pressione <code>1</code>–<code>6</code> para ir</span>
-    </div>
-    <div id="stations-list" class="stations-list"></div>
-
-    <div class="room-mode-box">
-      <div class="room-mode-header">
-        <span>Modo Sala Limitada 360°</span>
-        <button id="btn-toggle-room" class="btn-action active">Sala Ativa (R)</button>
-      </div>
-      <p class="room-mode-desc">
-        Delimita um espaço físico estilo <em>Guardian / Sala Virtual</em> com painéis holográficos na altura das mãos (1.50m) enquanto a cidade real 1:1 cerca você.
-      </p>
-    </div>
-  </aside>
-
-  <!-- Painel Lateral Direito: Controles de Ambiente, Escala e Tratamento Visual -->
-  <aside id="controls-panel">
-    <div class="panel-header">
-      <h2>Controle de Imersão & Escala</h2>
-    </div>
-
-    <div class="control-group">
-      <label>Modo de Visão / Movimento</label>
-      <div class="btn-grid-2">
-        <button id="btn-mode-walk" class="btn-toggle active" title="Atalho: C">🚶 Caminhar 1:1 (1.70m)</button>
-        <button id="btn-mode-drone" class="btn-toggle" title="Atalho: F">🛸 Voo Livre / Drone</button>
-      </div>
-    </div>
-
-    <div class="control-group">
-      <label>Altura Humana (Olhos): <strong id="lbl-height-val">1.70m</strong></label>
-      <input type="range" id="slider-height" min="1.50" max="1.95" step="0.01" value="1.70" />
-    </div>
-
-    <div class="control-group">
-      <label>Horário / Iluminação no Recife Antigo</label>
-      <div class="btn-grid-3">
-        <button class="btn-time active" data-time="day">☀️ Dia</button>
-        <button class="btn-time" data-time="sunset">🌅 Pôr do Sol</button>
-        <button class="btn-time" data-time="night">🌙 Noite Neon</button>
-      </div>
-    </div>
-
-    <div class="control-group">
-      <label>Referências de Escala Humana (1.75m)</label>
-      <button id="btn-toggle-Silhouettes" class="btn-toggle active">👥 Mostrar Mentores / Pessoas 1:1 na Rua</button>
-    </div>
-
-    <div id="room-info-card" class="room-info-card">
-      <div class="card-tag" id="card-badge">SALA 01 • MARCO ZERO</div>
-      <h3 id="card-title">Praça do Marco Zero (Rosa dos Ventos)</h3>
-      <p id="card-desc">
-        Você está no ponto zero do Recife Antigo em escala real 1:1. Olhe ao redor para ver os prédios históricos na proporção exata e interaja com os totens da BBTS e da Comunidade IV.
-      </p>
-      <div class="card-metrics" id="card-metrics"></div>
-    </div>
-  </aside>
-
-  <!-- Mira Central para Modo Primeira Pessoa (Walk 1:1) -->
-  <div id="crosshair" class="hidden">
-    <div class="crosshair-dot"></div>
-    <div class="crosshair-ring"></div>
-  </div>
-
-  <!-- Barra Inferior: Instruções Rápidas + Botão Entrar em Caminhada 1:1 / Meta Quest 3S -->
-  <footer id="hud-bottom">
-    <div class="controls-legend">
-      <span><kbd>Clique na Tela</kbd> Olhar em 360° (1ª Pessoa)</span>
-      <span><kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd> Caminhar na Rua (1:1)</span>
-      <span><kbd>Shift</kbd> Correr (4.5 m/s)</span>
-      <span><kbd>Espaço</kbd> Pular</span>
-      <span><kbd>R</kbd> Alternar Paredes da Sala 360°</span>
-      <span><kbd>F</kbd> Alternar Caminhada / Drone</span>
-    </div>
-    <div class="vr-actions">
-      <button id="btn-enter-fpv" class="btn-primary">🚶 Caminhar na Rua em 1ª Pessoa (1:1)</button>
-      <div id="vr-button-Mount"></div>
-    </div>
-  </footer>
-
   <canvas id="xr-canvas"></canvas>
   <script type="module" src="app.js"></script>
 </body>
 </html>
-
