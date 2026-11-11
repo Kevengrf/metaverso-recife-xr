@@ -1,0 +1,227 @@
+[
+  {
+    "code": "03726171425142515",
+    "slug": "marco_zero_centro",
+    "file": "assets/tiles/marco_zero_centro.glb",
+    "description": "Praça do Marco Zero & Caixa Cultural",
+    "grid": [
+      0,
+      0
+    ],
+    "size_kb": 4876.8,
+    "vertices": 82982,
+    "triangles": 53181,
+    "bounds": {
+      "min": [
+        -268.56,
+        -19.87,
+        -39.38
+      ],
+      "max": [
+        38.07,
+        63.63,
+        269.79
+      ]
+    }
+  },
+  {
+    "code": "03726171425142514",
+    "slug": "cais_santa_rita_oeste",
+    "file": "assets/tiles/cais_santa_rita_oeste.glb",
+    "description": "Cais de Santa Rita & Rio Capibaribe",
+    "grid": [
+      -1,
+      0
+    ],
+    "size_kb": 2562.8,
+    "vertices": 44053,
+    "triangles": 26736,
+    "bounds": {
+      "min": [
+        37.77,
+        -22.74,
+        -39.38
+      ],
+      "max": [
+        343.82,
+        73.81,
+        269.76
+      ]
+    }
+  },
+  {
+    "code": "03726171425143404",
+    "slug": "parque_esculturas_leste",
+    "file": "assets/tiles/parque_esculturas_leste.glb",
+    "description": "Parque das Esculturas de Brennand & Arrecifes",
+    "grid": [
+      1,
+      0
+    ],
+    "size_kb": 895.3,
+    "vertices": 13543,
+    "triangles": 9325,
+    "bounds": {
+      "min": [
+        -573.37,
+        -24.82,
+        -39.38
+      ],
+      "max": [
+        -267.68,
+        24.7,
+        267.94
+      ]
+    }
+  },
+  {
+    "code": "03726171425142517",
+    "slug": "bom_jesus_arsenal_norte",
+    "file": "assets/tiles/bom_jesus_arsenal_norte.glb",
+    "description": "Rua do Bom Jesus, Paço do Frevo, Torre Malakoff & Cais do Sertão",
+    "grid": [
+      0,
+      1
+    ],
+    "size_kb": 4475.5,
+    "vertices": 78768,
+    "triangles": 48692,
+    "bounds": {
+      "min": [
+        -268.57,
+        -5.33,
+        -347.62
+      ],
+      "max": [
+        38.07,
+        72.84,
+        -38.45
+      ]
+    }
+  },
+  {
+    "code": "03726171425140737",
+    "slug": "recife_antigo_sul",
+    "file": "assets/tiles/recife_antigo_sul.glb",
+    "description": "Av. Marquês de Olinda, Madre de Deus & Pontes",
+    "grid": [
+      0,
+      -1
+    ],
+    "size_kb": 2575.0,
+    "vertices": 45049,
+    "triangles": 28765,
+    "bounds": {
+      "min": [
+        -267.64,
+        -22.89,
+        268.86
+      ],
+      "max": [
+        38.07,
+        24.23,
+        577.69
+      ]
+    }
+  },
+  {
+    "code": "03726171425143406",
+    "slug": "porto_digital_nordeste",
+    "file": "assets/tiles/porto_digital_nordeste.glb",
+    "description": "Cais do Sertão & Porto do Recife",
+    "grid": [
+      1,
+      1
+    ],
+    "size_kb": 1874.6,
+    "vertices": 31121,
+    "triangles": 20511,
+    "bounds": {
+      "min": [
+        -573.37,
+        -25.82,
+        -347.62
+      ],
+      "max": [
+        -267.68,
+        40.73,
+        -39.06
+      ]
+    }
+  },
+  {
+    "code": "03726171425141626",
+    "slug": "bacia_porto_sudeste",
+    "file": "assets/tiles/bacia_porto_sudeste.glb",
+    "description": "Bacia do Porto & Molhe Sul",
+    "grid": [
+      1,
+      -1
+    ],
+    "size_kb": 664.9,
+    "vertices": 8841,
+    "triangles": 6613,
+    "bounds": {
+      "min": [
+        -572.46,
+        -15.36,
+        268.86
+      ],
+      "max": [
+        -267.68,
+        8.02,
+        576.18
+      ]
+    }
+  },
+  {
+    "code": "03726171425142516",
+    "slug": "ponte_limoeiro_noroeste",
+    "file": "assets/tiles/ponte_limoeiro_noroeste.glb",
+    "description": "Rio Capibaribe Norte & Santo Amaro",
+    "grid": [
+      -1,
+      1
+    ],
+    "size_kb": 980.6,
+    "vertices": 17526,
+    "triangles": 11710,
+    "bounds": {
+      "min": [
+        38.11,
+        -22.74,
+        -347.62
+      ],
+      "max": [
+        343.82,
+        11.07,
+        -39.09
+      ]
+    }
+  },
+  {
+    "code": "03726171425140736",
+    "slug": "santo_antonio_sudoeste",
+    "file": "assets/tiles/santo_antonio_sudoeste.glb",
+    "description": "Ponte Maurício de Nassau & Santo Antônio",
+    "grid": [
+      -1,
+      -1
+    ],
+    "size_kb": 1719.5,
+    "vertices": 28690,
+    "triangles": 19152,
+    "bounds": {
+      "min": [
+        37.19,
+        -17.42,
+        268.86
+      ],
+      "max": [
+        343.82,
+        56.85,
+        578.04
+      ]
+    }
+  }
+]
